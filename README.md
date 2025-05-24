@@ -47,5 +47,38 @@ cp .env.example .env
 ## Project Status
 🚧 Under Development
 
+## TODO
+
+### Configuration Management
+- [ ] Move hardcoded values to configuration
+- [ ] Add configuration validation
+- [ ] Support different environments (dev/prod)
+- [ ] Add configuration for frame processing parameters
+
+### Video Capture Enhancements
+- [ ] Add frame processing capabilities:
+  - [ ] Resize frames
+  - [ ] Format conversion (BGR to RGB)
+  - [ ] Frame rate control
+  - [ ] Frame buffering
+- [ ] Support iPhone camera streaming:
+  - [ ] Integrate with Continuity Camera
+  - [ ] Add NSCameraUseContinuityCameraDeviceType to Info.plist
+  - [ ] Handle AVCaptureDeviceTypeContinuityCamera
+- [ ] Add support for multiple camera sources
+- [ ] Add camera hot-swapping
+
+### Performance Optimizations
+- [ ] Implement frame skipping for performance
+- [ ] Add async frame capture
+- [ ] Optimize memory usage for continuous streaming
+- [ ] Add performance monitoring
+
+### Error Handling & Logging
+- [ ] Improve error messages for camera permissions
+- [ ] Add reconnection logic for lost connections
+- [ ] Add detailed logging for debugging
+- [ ] Add telemetry for monitoring
+
 ## License
 MIT License (coming soon) 
