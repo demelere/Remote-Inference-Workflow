@@ -1,0 +1,12 @@
+# Core dependencies
+opencv-python>=4.8.0  # Video capture and image processing
+numpy>=1.24.0        # Array operations for image handling
+
+# Networking
+requests>=2.31.0     # For API interactions with Roboflow
+python-dotenv>=1.0.0 # For managing environment variables (API keys)
+
+# Optional: Development tools
+pytest>=7.4.0        # For running tests
+black>=23.3.0        # Code formatting
+flake8>=6.1.0        # Code linting 
