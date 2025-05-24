@@ -42,7 +42,31 @@ cp .env.example .env
 # - Set camera/video source
 ```
 
-### 4. Run the client (coming soon)
+### 4. Testing
+
+#### Test Video Capture
+To test your camera/video input:
+```bash
+python tests/test_video_capture.py
+```
+This will open a window showing your camera feed. Press 'q' to quit.
+
+#### Test UDP Streaming
+To test video streaming with compression and metrics:
+```bash
+python tests/test_udp_streaming.py
+```
+This will:
+- Start a local test UDP server
+- Stream compressed video frames (320x240)
+- Display real-time metrics including:
+  - FPS
+  - Frame sizes
+  - Compression ratio
+  - Buffer usage
+Press 'q' to quit.
+
+### 5. Run the client (coming soon)
 
 ## Project Status
 🚧 Under Development
