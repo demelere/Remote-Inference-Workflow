@@ -3,6 +3,7 @@ import sys
 import socket
 import logging
 import threading
+import time
 from pathlib import Path
 
 # Add src to Python path
@@ -28,6 +29,38 @@ def run_test_server(host='localhost', port=5000):
     finally:
         server_socket.close()
 
+def display_metrics(frame, metrics):
+    """Display metrics on the frame."""
+    if not metrics:
+        return frame
+    
+    # Create a copy of the frame
+    frame_with_metrics = frame.copy()
+    
+    # Add black background for text
+    cv2.rectangle(frame_with_metrics, (10, 10), (400, 150), (0, 0, 0), -1)
+    
+    # Add metrics text
+    font = cv2.FONT_HERSHEY_SIMPLEX
+    y_pos = 30
+    white = (255, 255, 255)
+    
+    fps = 1.0 / metrics['avg_process_time'] if metrics['avg_process_time'] > 0 else 0
+    metrics_text = [
+        f"FPS: {fps:.1f}",
+        f"Frame Size: {metrics['avg_frame_size']/1024:.1f}KB",
+        f"Buffer Usage: {(metrics['avg_frame_size']/65507)*100:.1f}%",
+        f"Compression: {metrics['avg_compression']:.3f}",
+        f"Quality: {metrics['current_quality']}",
+        f"Total Frames: {metrics['frames_sent']}"
+    ]
+    
+    for text in metrics_text:
+        cv2.putText(frame_with_metrics, text, (20, y_pos), font, 0.6, white, 1)
+        y_pos += 20
+    
+    return frame_with_metrics
+
 def main():
     # Set up logging
     logging.basicConfig(level=logging.INFO)
@@ -43,8 +76,17 @@ def main():
         print("Failed to start video capture")
         return
     
-    # Initialize UDP client
-    client = UDPClient()
+    # Get frame dimensions
+    width, height = cap.get_frame_dimensions()
+    print(f"Original frame dimensions: {width}x{height}")
+    
+    # Initialize UDP client with target size
+    client = UDPClient(
+        initial_jpeg_quality=40,
+        min_jpeg_quality=20,
+        target_size=(320, 240)
+    )
+    
     if not client.connect():
         print("Failed to create UDP socket")
         cap.release()
@@ -65,8 +107,12 @@ def main():
                 if success:
                     print(f"Received: {data.decode()}")
             
+            # Get and display metrics
+            metrics = client.get_metrics()
+            frame_with_metrics = display_metrics(frame, metrics)
+            
             # Display the frame
-            cv2.imshow('UDP Streaming Test', frame)
+            cv2.imshow('UDP Streaming Test', frame_with_metrics)
             
             # Press 'q' to quit
             if cv2.waitKey(1) & 0xFF == ord('q'):
